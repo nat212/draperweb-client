@@ -13,7 +13,7 @@ class DraperWebApp extends StatefulWidget {
 
 class _DraperWebAppState extends State<DraperWebApp> {
   final settings = ValueNotifier(ThemeSettings(
-      sourceColor: const Color(0xFF4DB6AC),
+      sourceColor: const Color(0xFFA840FF),
       themeMode: SettingsProvider.themeMode));
 
   @override

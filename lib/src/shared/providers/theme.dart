@@ -124,8 +124,8 @@ class ThemeProvider extends InheritedWidget {
   AppBarTheme appBarTheme(ColorScheme colors) {
     return AppBarTheme(
       elevation: 4,
-      backgroundColor: colors.surface,
-      foregroundColor: colors.onBackground,
+      backgroundColor: colors.primary,
+      foregroundColor: colors.onPrimary,
     );
   }
 
@@ -154,7 +154,7 @@ class ThemeProvider extends InheritedWidget {
   BottomNavigationBarThemeData bottomNavigationBarTheme(ColorScheme colors) {
     return BottomNavigationBarThemeData(
       type: BottomNavigationBarType.fixed,
-      backgroundColor: colors.surfaceVariant,
+      backgroundColor: colors.surface,
       selectedItemColor: colors.onSurface,
       unselectedItemColor: colors.onSurfaceVariant,
       elevation: 0,

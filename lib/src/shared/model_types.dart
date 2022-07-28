@@ -1,0 +1,1 @@
+const accountTypeId = 0;

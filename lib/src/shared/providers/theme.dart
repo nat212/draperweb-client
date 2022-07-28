@@ -100,6 +100,10 @@ class ThemeProvider extends InheritedWidget {
         brightness: brightness);
   }
 
+  static ColorScheme colorScheme(Brightness brightness, Color targetColor) {
+    return ColorScheme.fromSeed(seedColor: targetColor, brightness: brightness);
+  }
+
   BorderRadius get mediumBorderRadius => BorderRadius.circular(8);
 
   ShapeBorder get shapeMedium => RoundedRectangleBorder(

@@ -18,6 +18,8 @@ class Win32Window {
     Point(unsigned int x, unsigned int y) : x(x), y(y) {}
   };
 
+  bool SendAppLinkToInstance(const std::wstring& title);
+
   struct Size {
     unsigned int width;
     unsigned int height;

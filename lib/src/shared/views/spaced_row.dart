@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class SpacedRow extends StatelessWidget {
   const SpacedRow(
       {Key? key,
-      required this.children,
+      this.children = const [],
       this.mainAxisSize = MainAxisSize.min,
       this.mainAxisAlignment = MainAxisAlignment.start,
       this.crossAxisAlignment = CrossAxisAlignment.center,

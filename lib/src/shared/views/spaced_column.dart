@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class SpacedColumn extends StatelessWidget {
   const SpacedColumn(
       {Key? key,
-      required this.children,
+      this.children = const [],
       this.mainAxisSize = MainAxisSize.min,
       this.mainAxisAlignment = MainAxisAlignment.start,
       this.crossAxisAlignment = CrossAxisAlignment.center,

@@ -1,3 +1,4 @@
+import 'package:draperweb/src/shared/extensions.dart';
 import 'package:draperweb/src/shared/providers/theme.dart';
 import 'package:draperweb/src/shared/views/adaptive_padding.dart';
 import 'package:draperweb/src/shared/views/spaced_column.dart';
@@ -26,89 +27,152 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+  static const List<_Shortcut> _ecosystemShortcuts = [
+    _Shortcut(
+      url: 'https://box.draper.net.za/mail',
+      icon: 'assets/logo/roundcube.svg',
+      label: 'Draper Mail',
+    ),
+    _Shortcut(
+      url: 'https://box.draper.net.za/cloud',
+      icon: 'assets/logo/nextcloud.svg',
+      label: 'Draper Cloud',
+    ),
+    _Shortcut(
+      url: 'https://box.draper.net.za/admin',
+      icon: 'assets/logo/draperweb.svg',
+      label: 'Draper Admin',
+    ),
+  ];
+
+  static const List<_Shortcut> _mediaShortcuts = [
+    _Shortcut(
+      url: 'http://192.168.0.100:8989',
+      icon: 'assets/logo/sonarr.svg',
+      label: 'Sonarr (Series)',
+    ),
+    _Shortcut(
+      url: 'http://192.168.0.100:7878',
+      icon: 'assets/logo/radarr.svg',
+      label: 'Radarr (Movies)',
+    ),
+    _Shortcut(
+      url: 'http://192.168.0.100:8686',
+      icon: 'assets/logo/lidarr.png',
+      label: 'Lidarr (Music)',
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Dashboard'),
       ),
-      body: SingleChildScrollView(
-        child: AdaptivePadding(
-          child: _body(),
+      body: LayoutBuilder(
+        builder: (context, constraints) => SingleChildScrollView(
+          child: AdaptivePadding(
+            maxWidth: constraints.isDesktop ? 1200 : 600,
+            child: _body(context, constraints),
+          ),
         ),
       ),
     );
   }
 
-  Widget _body() {
-    return SpacedColumn(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Text('Shortcuts', style: Theme.of(context).textTheme.headline5),
-        Text('Draper Ecosystem',
-            style: Theme.of(context).textTheme.headline6!.copyWith(
-                color: Theme.of(context)
-                    .colorScheme
-                    .onBackground
-                    .withOpacity(0.75))),
-        const SpacedRow(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _DashboardShortcut(
-                shortcut: _Shortcut(
-              url: 'https://box.draper.net.za/mail',
-              icon: 'assets/logo/roundcube.svg',
-              label: 'Draper Mail',
-            )),
-            _DashboardShortcut(
-                shortcut: _Shortcut(
-              url: 'https://box.draper.net.za/cloud',
-              icon: 'assets/logo/nextcloud.svg',
-              label: 'Draper Cloud',
-            )),
-          ],
-        ),
-        const _DashboardShortcut(
-          shortcut: _Shortcut(
-            url: 'https://box.draper.net.za/admin',
-            icon: 'assets/logo/draperweb.svg',
-            label: 'Draper Admin',
-          ),
-        ),
-        Text('Media System',
-            style: Theme.of(context).textTheme.headline6!.copyWith(
-                color: Theme.of(context)
-                    .colorScheme
-                    .onBackground
-                    .withOpacity(0.75))),
-        const SpacedRow(
-          children: [
-            _DashboardShortcut(
-              shortcut: _Shortcut(
-                url: 'http://192.168.0.100:8989',
-                icon: 'assets/logo/sonarr.svg',
-                label: 'Sonarr (Series)',
+  Widget _body(BuildContext context, BoxConstraints constraints) {
+    return !constraints.isDesktop
+        ? SpacedColumn(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text('Shortcuts', style: Theme.of(context).textTheme.headline5),
+              Text('Draper Ecosystem',
+                  style: Theme.of(context).textTheme.headline6!.copyWith(
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onBackground
+                          .withOpacity(0.75))),
+              SpacedRow(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  for (final shortcut in constraints.maxWidth <= 600
+                      ? _ecosystemShortcuts.getRange(0, 2)
+                      : _ecosystemShortcuts)
+                    _DashboardShortcut(shortcut: shortcut),
+                ],
               ),
-            ),
-            _DashboardShortcut(
-              shortcut: _Shortcut(
-                url: 'http://192.168.0.100:7878',
-                icon: 'assets/logo/radarr.svg',
-                label: 'Radarr (Movies)',
+              if (constraints.maxWidth <= 600)
+                _DashboardShortcut(shortcut: _ecosystemShortcuts.last),
+              Text('Media System',
+                  style: Theme.of(context).textTheme.headline6!.copyWith(
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onBackground
+                          .withOpacity(0.75))),
+              SpacedRow(
+                children: [
+                  for (final shortcut in constraints.maxWidth <= 600
+                      ? _mediaShortcuts.getRange(0, 2)
+                      : _mediaShortcuts)
+                    _DashboardShortcut(shortcut: shortcut),
+                ],
               ),
-            ),
-          ],
-        ),
-        const _DashboardShortcut(
-          shortcut: _Shortcut(
-            url: 'http://192.168.0.100:8686',
-            icon: 'assets/logo/lidarr.png',
-            label: 'Lidarr (Music)',
-          ),
-        ),
-      ],
-    );
+              if (constraints.maxWidth <= 600)
+                _DashboardShortcut(shortcut: _mediaShortcuts.last),
+            ],
+          )
+        : SpacedColumn(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Shortcuts', style: Theme.of(context).textTheme.headline5),
+              SpacedRow(
+                spacing: 128,
+                children: [
+                  SpacedColumn(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Draper Ecosystem',
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline6!
+                              .copyWith(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onBackground
+                                      .withOpacity(0.75))),
+                      SpacedRow(
+                        children: [
+                          for (final shortcut in _ecosystemShortcuts)
+                            _DashboardShortcut(shortcut: shortcut),
+                        ],
+                      )
+                    ],
+                  ),
+                  SpacedColumn(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Media System',
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline6!
+                              .copyWith(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onBackground
+                                      .withOpacity(0.75))),
+                      SpacedRow(
+                        children: [
+                          for (final shortcut in _mediaShortcuts)
+                            _DashboardShortcut(shortcut: shortcut),
+                        ],
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ],
+          );
   }
 }
 
@@ -120,7 +184,6 @@ class _DashboardShortcut extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Ink(
-      padding: const EdgeInsets.all(16),
       height: 128,
       width: 128,
       decoration: BoxDecoration(
@@ -132,17 +195,20 @@ class _DashboardShortcut extends StatelessWidget {
         onTap: () {
           launchUrl(Uri.parse(shortcut.url));
         },
-        child: SpacedColumn(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Expanded(
-              child: shortcut.icon.endsWith('.svg')
-                  ? SvgPicture.asset(shortcut.icon)
-                  : Image.asset(shortcut.icon),
-            ),
-            Text(shortcut.label),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: SpacedColumn(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expanded(
+                child: shortcut.icon.endsWith('.svg')
+                    ? SvgPicture.asset(shortcut.icon)
+                    : Image.asset(shortcut.icon),
+              ),
+              Text(shortcut.label),
+            ],
+          ),
         ),
       ),
     );
